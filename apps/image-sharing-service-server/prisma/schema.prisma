@@ -1,0 +1,41 @@
+datasource db {
+  provider = "mysql"
+  url      = env("DB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Group {
+  createdAt   DateTime @default(now())
+  description String?
+  id          String   @id @default(cuid())
+  images      Image[]
+  name        String?
+  updatedAt   DateTime @updatedAt
+}
+
+model Image {
+  createdAt  DateTime @default(now())
+  group      Group?   @relation(fields: [groupId], references: [id])
+  groupId    String?
+  id         String   @id @default(cuid())
+  updatedAt  DateTime @updatedAt
+  uploadedBy String?
+  url        String?
+}
+
+model User {
+  createdAt    DateTime @default(now())
+  email        String?  @unique
+  firstName    String?
+  id           String   @id @default(cuid())
+  lastName     String?
+  password     String
+  roles        Json
+  updatedAt    DateTime @updatedAt
+  userName     String?
+  userPassword String?
+  username     String   @unique
+}
